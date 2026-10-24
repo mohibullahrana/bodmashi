@@ -78,6 +78,15 @@ a.card{text-decoration:none;color:inherit}
 }
 @media (max-height:560px) and (min-width:821px){.tags,.eyebrow{display:none}}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;animation-delay:0s!important}}
+.cert{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.cert a,.cert button{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border:1px solid rgba(255,255,255,.3);border-radius:99px;background:rgba(255,255,255,.06);color:#eee;font:inherit;font-size:.72rem;letter-spacing:.06em;text-decoration:none;cursor:pointer;transition:background .3s,color .3s}
+.cert a:hover,.cert button:hover{background:#fff;color:#000}
+.cert svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.modal{position:fixed;inset:0;z-index:50;display:grid;place-items:center;background:rgba(0,0,0,.8);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s}
+.modal.open{opacity:1;visibility:visible}
+.modal img{width:70vw;height:70vh;object-fit:contain;border:1px solid rgba(255,255,255,.3);border-radius:12px;background:#000;transform:scale(.92);transition:transform .35s}
+.modal.open img{transform:scale(1)}
+.modal .x{position:absolute;top:max(16px,env(safe-area-inset-top));right:16px;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.4);background:rgba(0,0,0,.5);color:#fff;font-size:1.3rem;cursor:pointer}
 </style>
 </head>
 <body>
@@ -139,7 +148,12 @@ a.card{text-decoration:none;color:inherit}
           <div class="card"><span class="k">Google Skill</span><b>Google Cloud Data Analytics</b><span>Google Cloud</span></div>
           <div class="card"><span class="k">Microsoft Learn</span><b>Dynamics 365 Finance</b><span>Accounting and Finance</span></div>
           <div class="card"><span class="k">IT Computer City</span><b>Graphic Design</b><span>Professional course</span></div>
-          <div class="card"><span class="k">Mentors</span><b>Spoken English and Phonetics</b><span>Language training</span></div>
+          <div class="card"><span class="k">Mentors</span><b>Spoken English and Phonetics</b><span>Language training</span>
+  <div class="cert">
+    <button type="button" data-cert="certificate.jpg"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>View certificate</button>
+    <a href="https://YOUR-VERIFY-LINK" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg>Verify certificate</a>
+  </div>
+</div>
         </div>
       </section>
 
@@ -169,12 +183,19 @@ a.card{text-decoration:none;color:inherit}
     <small>© 2026 Mohibullah Rana · Personal Portfolio</small>
   </footer>
 </div>
-
+<div class="modal" id="certModal" aria-hidden="true">
+  <button class="x" aria-label="Close">×</button>
+  <img id="certImg" alt="Certificate">
+</div>
 <script>
 const box=document.querySelector('.panels'),hint=document.getElementById('hint');
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{root:box,threshold:.15});
 document.querySelectorAll('.panel').forEach(p=>io.observe(p));
 box.addEventListener('scroll',()=>{const end=box.scrollTop+box.clientHeight>=box.scrollHeight-8;hint.style.opacity=(box.scrollTop>20&&end)||box.scrollTop>80?0:1},{passive:true});
+const modal=document.getElementById('certModal'),certImg=document.getElementById('certImg');
+document.querySelectorAll('[data-cert]').forEach(b=>b.addEventListener('click',()=>{certImg.src=b.dataset.cert;modal.classList.add('open')}));
+modal.addEventListener('click',e=>{if(e.target!==certImg)modal.classList.remove('open')});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')modal.classList.remove('open')});
 </script>
 </body>
 </html>
